@@ -1,0 +1,8 @@
+# Notes for the TAS F-paper
+
+* Authors' [instructions for TAS](http://amstat.tfjournals.com/asa-style-guide/)
+* Description of *Teachers' Corner* papers
+    > Should be written with the following elements in the following order: title page; abstract; keywords; main text introduction, acknowledgments; references; appendices (as appropriate); table(s) with caption(s) (on individual pages); figures; figure captions (as a list)
+    > Should contain an unstructured abstract of 200 words.
+    > Should contain between 3 and 5 keywords. Read making your article more discoverable, including information on choosing a title and search engine optimization.
+    > In this section The American Statistician publishes articles, notes, and discussions of interest to statistics teachers covering a variety of different courses and settings. The range includes: • statistics and probability topics for high school students, including Advanced Placement Statistics; • introductory college courses in statistics for all audiences; • applied statistics courses at all levels; • industrial and continuing education outside the framework of standard academic courses; and • mathematical statistics courses at the undergraduate and first-year graduate level. An article for this section should state clearly the type of course in which the material is useful and it is desirable to discuss student reactions to the ideas presented.
