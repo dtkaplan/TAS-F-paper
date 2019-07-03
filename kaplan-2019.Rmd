@@ -199,7 +199,7 @@ An important inferential statistic based on R^2^ and sample size $n$ is the F-st
 
 $$\mbox{F} = (n-1) \frac{\mbox{R}^2}{1 - \mbox{R}^2} .$$
 
-The 95% confidence interval on the effect size is simply expressed in terms of F:
+The 95% confidence interval on the effect size B is simply expressed in terms of F:
 
 $$\mbox{95% confidence interval} = B (1 \pm 2 / \sqrt{F}). $$
 
@@ -209,32 +209,49 @@ In the conventional approach to inference, a variety of test statistics is used:
 
 In the proposed approach, F is used for all inference settings. Following the traditional practice, F can be translated to a  p-value can be determined by reference to a table, software, or simply the graph in Figure XXXX. There are $n-1$ degrees of freedom. On the other hand, since F is used for all of the inference tests, it's sensible just to use F as the measure of implausibility of the null hypothesis. $\mbox{F} > 4$ corresponds to  $p < 0.05$ while $\mbox{F} > 7$ corresponds to $p < 0.01$.
 
+The graphical format of situations (a) through (d) is readily generalized to include multiple levels for the categorical explanatory variable enabling "one-way" ANOVA to be handled with the same apparatus. 
 
-# Other benefits
+There is a small change to the formula for F. For $k$ groups, 
+$$\mbox{F} = \frac{n-(k-1)}{k-1} \frac{\mbox{R}^2}{1 - \mbox{R}^2} .$$
 
-The graphics described in this section are point plots of data were annotated with models of the response variable as a function of the explanatory variable. When the criterion for fitting a model is least sum of squares, the models are the familiar ones in introductory statistics: means, proportions, and least-square regression lines. 
+(See Section XXXXX pedagogy XXXXX for suggestions on explaining this change to students.)
 
-Of course, the same format of graphic can be made with models constructed using other criteria. Of particular interest pedagogically is the criterion of a student's judgement of what constitutes a pretty good fit. Using this criterion enables trained students to work entirely with a graphical representation of data, without needing explicit computation. Each of the situations (a) through (d) is amenable to approximation by eye of the groupwise means or the straight-line model. Similarly, the standard deviations used in the rug plots can be estimated by eye. 
+IMAGES: 
 
-Many statistical educators believe -- rightly or wrongly -- that drill with hand computation of quantities such as the mean and standard deviation informs a student's understanding of these quantities. Such instructors may be inclined to believe that "computation by eye," as can be done with the graphics (a) through (d), is similarly beneficial.
+* One-way ANOVA
+* Two explanatory variables
 
-ANOVA
+The same graphical format can also be used for multiple regression. One way is to represent the second explanatory variable by discrete colors (when the second variable is categorical) or by a color gradient (when the second variable is numerical). F calculated in the manner described above corresponds to the correct value of the whole-model p-value. However, there is no simple formula for confidence intervals on the multiple-regression model coefficients.
 
-MULTIPLE REGRESSION
+# Pedagogy
 
-ROBUST REGRESSION
+The primary goals of the proposed approach to statistical inference are:
 
-HAND CALCULATIONS
+1. to simplify the topic while keeping it genuine by reducing the several settings of the traditional approach to a single setting that can be handled by a single graphical format.
+2. to smooth the path for students to work with two explanatory variables
+ 
+
+Over the last decade, there has been growing recognition in the statistical education community in incorporating settings with multiple explanatory variables in introductory university-level statistics. [See e.g. Kaplan, Horton, Shield] The 2016 Guidelines for Assessment and Instruction in Statistics Education (GAISE cite). The first GAISE recommendation includes "Give students experience with multivariable thinking."
+
+The graphic at the heart of the approach can be constructed with statistical software (such as R) or by a simple web application that requires no installation of software and no experience with code. (A draft of such a web app is available at <https://dtkaplan.shinyapps.io/LA_explain/>.) 
+
+A distinctive feature of lower-level university mathematics and statistics is that many instructors largely eschew modern computing in favor of a calculator. Among the justifications given for this practice are: 1. the lack of availability of computing infrastructure beyond calculators; 2. the belief  -- right or wrong -- that drill with hand computation of quantities such as the mean and standard deviation informs a student's understanding of these quantities; 3. using calculators helps to avoid students cheating on exams, since calculators generally lack the communications capabilities of computers. 
+
+One consequence of the exclusive use of calculators for teaching inference is that the formulas of the traditional approach are seen as essential components of statistical procedure, since the value of those formulas can be worked out by plugging in numerical estimates of simple, "sufficient" statistics such as the mean and standard deviation.
+
+The proposed approach to inference should be particularly attractive to those who avoid computing in their statistics classes. The standard graphic of the approach (Figure 3) can be generated by a web app or can be presented to students in a printed format.
 
 With a little practice, the value of $R \equiv \sqrt{R^2}$ can be read by eye directly from the graphic by comparing the length of the point-line marker for the model values to that of the raw values of the response variable.
 
+The remaining calculations involved in statistical inference can also be accomplished by eye, using graphs that encapsulates the formulas and probability tables of the traditional approach. Three such graphs may be particularly useful:
 
+1. Calculating the value of F from R and n. (Figure 4)
+2. Computing from F and n confidence intervals of the effect size B. (Figure 5)
+3. Calculating p-values from F and n. (Figure 6)
 
-The formula for F is somewhat tedious, but can be readily approximated from the graph in Figure 4.
-
-```{r F-graph, echo = FALSE, fig.cap="Computing F from R and n"}
+```{r F-graph, echo = FALSE, message = FALSE, fig.cap="Figure 4. Computing F from R and n"}
 make_vals <- function(n) {
-  tibble::data_frame(R = seq(0.05, 0.95, length = 100), 
+  tibble::tibble(R = seq(0.05, 0.95, length = 100), 
              samp_size = n,
              F = (n - 1) * R^2 / (1 - R^2),
              ci.lower = 1 - 2 / sqrt(F),
@@ -243,38 +260,81 @@ make_vals <- function(n) {
     mutate(samp_size = factor(samp_size))
 }
 Vals <- rbind(
+  make_vals(5),
+  make_vals(10),
   make_vals(20),
   make_vals(50),
   make_vals(100),
   make_vals(200),
   make_vals(500)
 )
-gf_line(F ~ R, color = ~ samp_size, data = Vals) %>%
+gf_line(F ~ R, color = ~ samp_size, 
+        data = Vals %>% filter( ! samp_size %in% c("5", "10"))) %>%
   gf_refine(scale_y_log10(
     breaks = c(1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 
                300, 500, 1000, 2000, 3000, 5000, 10000 )),
     scale_x_continuous(breaks = seq(0.1, 0.9, by = 0.1))) %>%
   gf_theme(our_theme) %>%
-  gf_labs(y = "F", title = "F from R and n")
+  gf_labs(y = "F", title = "F from R and n") +
+  guides(color = guide_legend(reverse = TRUE))
 ```
 
-```{r ci-from-F, echo = FALSE}
-gf_ribbon(ci.lower + ci.upper ~ R, fill = ~ samp_size, data = Vals, 
-          alpha = 0.9) +
-  scale_x_continuous(breaks = seq(0.1, 0.9, by = 0.1)) +
+
+
+```{r ci-from-F, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 5: Confidence intervals from F. Multiply the effect size B by the upper and lower bounds at the appropriate F value. The central blue band is for large n. Bounds are also shown for several small n."}
+Fringe_f <- Vals %>% filter(samp_size %in% c(5, 10, 20), F < 20)
+multipliers <- data.frame(samp_size = c("5", "10", "20"), 
+                          mult = c(6.608, 4.96, 4.35) / 3.85)
+Fringe_f <- Fringe_f %>% left_join(multipliers) %>%
+  mutate(top = 1 + (ci.upper-1) * mult, 
+         bottom = 1 - (top - 1))
+gf_ribbon(ci.lower + ci.upper ~ F, fill = "blue", 
+          data = Vals %>% filter(samp_size == "100", F < 20), 
+          alpha = 0.3) %>%
+  gf_line(top ~ F, color = ~ samp_size, data = Fringe_f, inherit = FALSE) %>%
+  gf_line(bottom ~ F, color = ~ samp_size, data = Fringe_f, inherit = FALSE) +
+  scale_x_continuous(breaks = 1:20) +
   scale_y_continuous(
     breaks = seq(-1, 3, by = 1),
     labels = c("-B", "0", "B", "2B", "3B"))  + 
   ylab("CI bounds") +
-  ylim(c(-1, 3))
+  ylim(c(-1, 3)) +
+  theme_bw()
 ```
+
+
+
+```{r echo = FALSE, fig.cap="Figure 6. p-values from F and n. 0.05 critical values are shown for n ≤ 10.", warning = FALSE}
+Small_n <- data.frame(
+  x = qf(.95, 1, 3:9),
+  y = 0.05
+)
+Fframe = list()
+for (n in c(5, 10, 20, 50, 100, 200)) {
+  Fframe[[n]] <- 
+    data.frame(F = seq(2, 12, by = .1)) %>%
+    mutate(p = 1 - pf(F,  1, n-1),
+           n = n)
+}
+Fframe <-  dplyr::bind_rows(Fframe) %>%
+  mutate(n = factor(n))
+gf_line(p ~ F, data = Fframe, color  = ~n) %>%
+  gf_point(y ~ x, data = Small_n, inherit = FALSE, shape = 3) +
+  scale_y_log10(breaks = c(0.1, 0.05, .002, 0.01, .005,  0.001),
+                minor_breaks = NULL) +
+  scale_x_continuous(breaks = 2:12) +
+  theme_bw()
+```
+
+These three graphs and an example from Figure 3 can be placed on the two sides of an ordinary index card and provided to students as the computing infrastructure needed for inference.
 
 # Objections
 
 1. Constant 2 in the formula for CI doesn't handle small n. Using 4 for the F value equivalent to $p < 0.05$ isn't even roughly right for small n.
 2. Why not use t? One-tailed versus two-tailed tests.
 3. It's not easier than using the standard error.
-
+4. Where's chi-square?
+5. What about the "one-sample" confidence interval on the mean and proportion?
 
 # Conclusion
 
@@ -303,6 +363,38 @@ A longer standing criticism stems from a perceived over-emphasis on theoretical 
 In this paper, I propose a pedagogical approach to inference that emphasizes the connections between the sample mean, sample proportion, and regression contexts, that provides a smooth path from "two-sample" and simple regression situations to multiple regression, that can be used in a classroom even without computers, and that always leaves the original data in plain view. Section 2 introduces the approach, Section 3 considers limitations and possible objections, and Section 4 discusses some salutary implications for introductory statistics in the emerging world of data science.
 
 
+# Taken out
+
+The graphics described in this section are point plots of data were annotated with models of the response variable as a function of the explanatory variable. When the criterion for fitting a model is least sum of squares, the models are the familiar ones in introductory statistics: means, proportions, and least-square regression lines. 
+
+Of course, the same format of graphic can be made with models constructed using other criteria. Of particular interest pedagogically is the criterion of a student's judgement of what constitutes a pretty good fit. Using this criterion enables trained students to work entirely with a graphical representation of data, without needing explicit computation. Each of the situations (a) through (d) is amenable to approximation by eye of the groupwise means or the straight-line model. Similarly, the standard deviations used in the rug plots can be estimated by eye. 
+
+
+
+ANOVA
+
+MULTIPLE REGRESSION
+
+ROBUST REGRESSION
+
+HAND CALCULATIONS
+
+
+```{r eval = FALSE, echo = FALSE}
+Fframe = list()
+for (n in c(3, 5, 10, 20, 50, 100, 200, 10000)) {
+  Fframe[[n]] <- 
+    data.frame(F = seq(.5, 20, length = 100)) %>%
+    mutate( p = 1 - pf(F,  1, n-1),
+            n = n)
+}
+Fframe <-  dplyr::bind_rows(Fframe) %>%
+  mutate(n = factor(n))
+gf_line(p ~ F, data = Fframe, color  = ~n) +
+  scale_y_log10(breaks = c(0.1, 0.05, .002, 0.01, .005,  0.001),
+                minor_breaks = NULL, limits = c(.0005, .2) ) +
+  scale_x_continuous(breaks  = 1:20)
+```
 
 
 
