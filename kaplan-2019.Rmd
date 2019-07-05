@@ -328,13 +328,33 @@ gf_line(p ~ F, data = Fframe, color  = ~n) %>%
 
 These three graphs and an example from Figure 3 can be placed on the two sides of an ordinary index card and provided to students as the computing infrastructure needed for inference.
 
-# Objections
+# Pros and cons
 
-1. Constant 2 in the formula for CI doesn't handle small n. Using 4 for the F value equivalent to $p < 0.05$ isn't even roughly right for small n.
-2. Why not use t? One-tailed versus two-tailed tests.
-3. It's not easier than using the standard error.
-4. Where's chi-square?
-5. What about the "one-sample" confidence interval on the mean and proportion?
+The traditional approach to introductory inference was developed over many decades. Scores of textbook authors have had the opportunity to contribute their improvements and perspectives. The most recent major innovation is the use of randomization procedures to introduce inference. [Cite Lock, Tintle, Open Intro]. It's a truism that almost everyone teaching statistics who has significant formal training in that field has seen and mastered, to the extent possible, the traditional approach. A very substantial fraction of instructors teaching introductory statistics, including this author, were not trained in statistics and learned the material from the textbook used in class.
+
+It's natural that people who are familiar with the traditional approach think about the underlying problem in those terms. For these people, any substantial deviation from the tried and true will seem initially more difficult. In addition, there are components of the proposed approach that will be unfamiliar to the many instructors whose training consists of teaching an introductory course. For example, R^2^ is not encountered in a many textbooks' chapters up through simple regression. Instead the emphasis is on the Pearson product-moment correlation coefficient, r. Many textbooks have a summation formula process for calculating F; the calculation via R^2^ is not seen in many introductory textbooks. Of dozens of statistics educators to whom I've demonstrated the proposed approach of calculating confidence intervals from F, none had any initial idea that this was possible. (It helps to remind instructors that, with one degree of freedom in the numerator, F = t^2. And to point out that t is the effect size B divided by the standard error. Thus, F is linked to the standard error and the confidence interval.)
+
+Of course, our students initially have no such mastery of the traditional approach. Properly judging the proposed approach's difficulty for students must necessarily involve trying it in the classroom. Encouraging instructors who see face validity to the proposed approach to try it in the classroom is the major purpose of this article.
+
+As a mathematical object of study, there's nothing about the traditional approach that needs fixing. But that object was developed to help researchers deal with contemporary problems, and the nature of contemporary problems has changed substantially in the many decades since the traditional approach was developed. In this regard, it's worth noting that approaches to inference outside of the tradition, e.g. statistical/machine learning are widely taught with an entirely non-traditional infrastructure, for instance, cross-validation. [cite: Machine era statistical inference.]
+
+Putting aside the objections to the proposed approach that will necessarily be fostered of lack of experience with it, let's now some potential statistical-theory related criticism.
+
+First, it's not unreasonable to see the standard error as the center of statistical inference, at least for the methods likely to be encountered in intro stats. With this view, isn't by-passing the standard error a disadvantage of the proposed approach? Yes, in the sense that it's generally better to know more than less. But teaching the standard error comes with its own costs. Students can be confused by the similar sounding terms "standard deviation" and "standard error." For most purposes, the standard error is only an intermediate result for calculating a confidence interval or a t statistic, and adds a bit of complexity to the overall process.
+
+Second, using F rather than t takes the rug out from under the traditional topic of one-tailed versus two-tailed tests. But one-tailed tests are controversial and easily mis-used. Recently, the American Statistical Association has stated an interest in de-emphasizing p-values as an instrument of inference. [CITE TAS] A lead editorial in this journal (TAS) stated:
+
+> *We conclude, based on our review of the articles in this special issue and the broader literature, that it is time to stop using the term "statistically significant" entirely. Nor should variants such as "significantly different," "p < 0.05," and "nonsignificant" survive, whether expressed in words, by asterisks in a table, or in some other way.*
+
+In this context, it hardly seems worthwhile to encourage students to distinguish between 0.10 and 0.05 as particular values of an arbitrary threshold. Besides, there are much more important factors at work in constructing a meaningful p-value that are not covered quantitatively in introductory statistics, e.g. the problems of "researcher degrees of freedom," multiple testing, and covariates.
+
+Third, no room has been given in the approach proposed here for calculating confidence intervals and p-values in the so-called "one-sample" setting. But these settings can be taught in other non-traditional ways, for instance by bootstrapping. And, insofar as one-sample settings are introduced to lead students to "two-sample" and other inference procedures involving explanatory variables, this is not a central loss.
+
+Fourth, the graphical approach for calculating p-values (Figure 6) and bounds of confidence intervals (Figure 5) does not result in sufficient precision. The shorthand of using 2 for what should be z* or t* dramatically understates the width of the confidence interval and overstates the p-value for n ≾ 10. In response, I offer two suggestions. 1. Arguably the dominant interest in data in today's world is in large n. 2. The presentation in Figures 5 and 6 actually does a good job in showing the situation for small n. Figure 5 can easily be augmented to show individual curves for whatever values of n are desired. Figure 6 already does this for the 0.05 critical values.
+
+Fifth, the chi-squared test is not incorporated in the proposed approach.  [1. There's no standard error in chi-squared. 2. You get to work with discrete response variables in more generality with a modeling approach. 3. There's nothing to prevent an instructor from continuing to teach chi-squared in the traditional way alongside the proposed approach.]
+\
+
 
 # Conclusion
 
