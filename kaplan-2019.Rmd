@@ -15,16 +15,23 @@ library(mosaicModel)
 our_theme <- theme_bw()
 ```
 
-A conventional approach to teaching statistical inference in a first university-level course refers to a series of statistics and their standard errors: the difference between two proportions, the difference between two means, and the slope of a regression line. Prior to this, the concept of a standard error is introduced in the context of a sample proportion and sample mean. 
+## Abstract {-}
 
-The challenges faced by students in this conventional approach are well known to instructors: the formulas for the standard errors are complicated; the formulas are different in the various settings, yet similar enough to be mistaken for one another; the connection of the formulas to the underlying idea of sampling variation is not obvious; the concept of a sampling distribution is nuanced; and the repeated use of the words sample, standard, error, statistic in the vocabulary -- standard deviation, standard error, margin of error, sample statistic, sampling variation, test statistic -- adds cognitive load.
+The paper introduces a new approach to teaching inference in college-level introductory statistics that can be used to streamline the inference curriculum and unify the various settings distinguished in the traditional curriculum. The new approach may be especially valuable to instructors who want to include appropriate statistics for handling covariates. The approach is appropriate even for instructors who avoid using computing in their courses, but can also be used by instructors who embrace computing for multiple regression or for a bootstrapping/simulation pedagogy. 
 
-Subsequent topics in inference are handled differently. In the chi-squared test and ANOVA, there is no standard error nor is there a confidence interval resulting from the process, just a p-value. This creates additional potential for confusion and draws undue attention to the p-value, which is the one quantity that appears in all of the inferential settings.
+# Introduction
+
+A conventional approach to teaching statistical inference in a first university-level course refers to a series of statistics and their standard errors in several specific contexts: the difference between two proportions, the difference between two means, and the slope of a regression line. Prior to this, the concept of a standard error is introduced in the context of a single sample proportion or sample mean. 
+
+I'll refer to the conventional (or "traditional") curriculum as the "SE curriculum." This paper presents a new and different perspective on introducing inference that unifies the various settings of the SE curriculum, potentially allowing instructors to streamline their courses and thereby extend the range of topics to include multivariable settings, such as recommended by the 2016 GAISE College report. [Cite: GAISE]
+
+The challenges faced by students in the SE curriculum are well known to instructors: the formulas for the standard errors are complicated; the formulas are different for the various settings yet similar enough to be mistaken for one another; the connection of the formulas to the underlying idea of sampling variation is not obvious; the concept of a sampling distribution is nuanced and difficult to assimilate; and cognitive load is imposed by the repeated use of the words sample, standard, error, statistic in the vocabulary: standard deviation, standard error, margin of error, sample statistic, sampling variation, test statistic.
+
+Subsequent topics in inference are handled differently. In the chi-squared test and ANOVA, there is no standard error nor is there a confidence interval resulting from the process, just a p-value. This creates additional potential for confusion and draws undue attention to the p-value, which is the one quantity that appears in all of the SE inferential settings.
 
 A recent trend is to unify the procedures of inference across the various settings by basing them on a couple of conceptually simple operations: resampling and shuffling. (See Lock5, Tintle.) This simulation-based approach is intrinsically rooted in computing that cannot practicably be done on a calculator or in a spreadsheet. Instead, the computing can be done using professional-level software packages (such as R) or custom-built, interactive web apps. (See software sites for Lock 5, Tintle.) 
 
-This note describes another way of unifying inference procedures by adopting a standard graphical presentation and calculations of confidence intervals and p-values without explicit reference to the standard error. Section 2 describes the graphical presentation and how it accomodates each of the inference settings in the conventional approach. Section 3 shows how confidence intervals and p-values can be calculated in a straightforward way without computing a standard error.
-Section 4 describes a web-based, interactive app to support exploration and use of the new approach and ways in which the new approach can help address broad problems with conventional inference described by the GAISE and ASA p-value reports. [CITE]  [ALSO IN SECTION 4, putting the statistics always in the context of the data.] Section 5 anticipates and addresses possible criticisms of the new approach. (?? Appendix: ggformula commands??)
+This note describes another way of unifying inference procedures -- the RF approach -- by adopting a standard graphical presentation and making calculations of confidence intervals and p-values without explicit reference to the standard error. Section 2 describes the graphical presentation and how it accomodates each of the inference settings in the conventional approach. Section 3 shows how confidence intervals and p-values can be calculated in a straightforward way without computing a standard error. Section 4 demonstrates how the RF approach can be used by instructors who eschew computing in their classes. Section 5 anticipates and addresses several possible criticisms of the new approach.
 
 # A unifying graphical presentation
 
@@ -207,9 +214,11 @@ The 2 in the formula for the confidence interval corresponds to the tradition 1.
 
 In the conventional approach to inference, a variety of test statistics is used: z for the difference in proportions, t for the difference in mean or regression slope, F for ANOVA and multiple regression. Given these different scales, it's sensible to summarize the results of a null hypothesis test with a common scale: the p-value which puts all results on a scale of 0 to 1.
 
-In the proposed approach, F is used for all inference settings. Following the traditional practice, F can be translated to a  p-value can be determined by reference to a table, software, or simply the graph in Figure XXXX. There are $n-1$ degrees of freedom. On the other hand, since F is used for all of the inference tests, it's sensible just to use F as the measure of implausibility of the null hypothesis. $\mbox{F} > 4$ corresponds to  $p < 0.05$ while $\mbox{F} > 7$ corresponds to $p < 0.01$.
+In the RF approach, F is used for all inference settings. Following the traditional practice, F can be translated to a  p-value can be determined by reference to a table, software, or simply the graph in Figure 6. There are $n-1$ degrees of freedom. On the other hand, since F is used for all of the inference tests, it's sensible just to use F as the measure of implausibility of the null hypothesis. $\mbox{F} > 4$ corresponds to  $p < 0.05$ while $\mbox{F} > 7$ corresponds to $p < 0.01$.
 
 The graphical format of situations (a) through (d) is readily generalized to include multiple levels for the categorical explanatory variable enabling "one-way" ANOVA to be handled with the same apparatus. 
+
+THIS IS WHERE YOU WERE WORKING!!
 
 There is a small change to the formula for F. For $k$ groups, 
 $$\mbox{F} = \frac{n-(k-1)}{k-1} \frac{\mbox{R}^2}{1 - \mbox{R}^2} .$$
@@ -340,7 +349,7 @@ As a mathematical object of study, there's nothing about the traditional approac
 
 Putting aside the objections to the proposed approach that will necessarily be fostered of lack of experience with it, let's now some potential statistical-theory related criticism.
 
-First, it's not unreasonable to see the standard error as the center of statistical inference, at least for the methods likely to be encountered in intro stats. With this view, isn't by-passing the standard error a disadvantage of the proposed approach? Yes, in the sense that it's generally better to know more than less. But teaching the standard error comes with its own costs. Students can be confused by the similar sounding terms "standard deviation" and "standard error." For most purposes, the standard error is only an intermediate result for calculating a confidence interval or a t statistic, and adds a bit of complexity to the overall process.
+First, it's not unreasonable to see the standard error as the center of statistical inference, at least for the methods likely to be encountered in intro stats. With this view, isn't by-passing the standard error a disadvantage of the proposed approach? Yes, in the sense that it's generally better to know more than less. But teaching the standard error comes with its own costs. Students can be confused by the similar sounding terms "standard deviation" and "standard error." For most purposes, the standard error is only an intermediate result for calculating a confidence interval or a t statistic, and adds a bit of complexity to the overall process. In any event, the standard error is easily introduced in the RF context via the simple formula $\mbox{se} = B / \sqrt{F}$. 
 
 Second, using F rather than t takes the rug out from under the traditional topic of one-tailed versus two-tailed tests. But one-tailed tests are controversial and easily mis-used. Recently, the American Statistical Association has stated an interest in de-emphasizing p-values as an instrument of inference. [CITE TAS] A lead editorial in this journal (TAS) stated:
 
@@ -350,71 +359,21 @@ In this context, it hardly seems worthwhile to encourage students to distinguish
 
 Third, no room has been given in the approach proposed here for calculating confidence intervals and p-values in the so-called "one-sample" setting. But these settings can be taught in other non-traditional ways, for instance by bootstrapping. And, insofar as one-sample settings are introduced to lead students to "two-sample" and other inference procedures involving explanatory variables, this is not a central loss.
 
-Fourth, the graphical approach for calculating p-values (Figure 6) and bounds of confidence intervals (Figure 5) does not result in sufficient precision. The shorthand of using 2 for what should be z* or t* dramatically understates the width of the confidence interval and overstates the p-value for n ≾ 10. In response, I offer two suggestions. 1. Arguably the dominant interest in data in today's world is in large n. 2. The presentation in Figures 5 and 6 actually does a good job in showing the situation for small n. Figure 5 can easily be augmented to show individual curves for whatever values of n are desired. Figure 6 already does this for the 0.05 critical values.
+Fourth, the graphical approach for calculating p-values (Figure 6) and bounds of confidence intervals (Figure 5) does not result in sufficient precision. The shorthand of using 2 for what should be z* or t* dramatically understates the width of the confidence interval and overstates the p-value for $n  \lessapprox 10$. In response, I offer two suggestions. 1. Arguably the dominant interest in data in today's world is in large n. 2. The presentation in Figures 5 and 6 actually does a good job in showing the situation for small n. Figure 5 can easily be augmented to show individual curves for whatever values of n are desired. Figure 6 already does this for the 0.05 critical values.
 
-Fifth, the chi-squared test is not incorporated in the proposed approach.  [1. There's no standard error in chi-squared. 2. You get to work with discrete response variables in more generality with a modeling approach. 3. There's nothing to prevent an instructor from continuing to teach chi-squared in the traditional way alongside the proposed approach.]
-\
+Fifth, for the "difference of two probabilities" (the setting of Figure 2b) it's conventional to use a z distribution for inference. In contrast, the RF approach effectively uses a t distribution. Still, for the range of n commonly encountered in examining the difference between two probabilities, the t distribution closely approximates z. Indeed, using a critical value of 2 for all the settings suffices even when $n \gtrapprox 10$.
+
+Sixth, the use of linear regression in a setting with a dicotomous response variable and continuous explanatory variable (setting (d) in Figure 2) fails to impose the natural constraint that probabilities must be between zero and one. Proper alternatives are readily available, such as logistic regression, in which log odds rather than raw probabilities are used. Similarly, appropriate statistical/machine-learning classifier techniques such as linear and quadratic discriminant analysis and support vector machines. Still, I think that linear regression provides a valuable introduction to students and helps point out the need for more advanced techniques. The pedagogy of starting with linear models in order to progress to logistic regression has been used for at least a decade. [Cite: Statistical Modeling]
+
+Seventh, the chi-squared test is not incorporated in the proposed approach.  [1. There's no standard error in chi-squared. 2. You get to work with discrete response variables in more generality with a modeling approach. 3. There's nothing to prevent an instructor from continuing to teach chi-squared in the traditional way alongside the proposed approach.
 
 
 # Conclusion
 
-Whether it makes sense to build inference from standard errors (the traditional approach) or from R and F (the approach proposed here), depends on the instructor's priorities. The standard-error approach was developed in the context of small $n$ and costly computation. (Sufficient statistics support a computationally light, two-phase approach to inferential calculation.) But it does not generalize to the use of multiple explanatory variables or even to multiple levels of a single categorical explanatory variable. 
+Whether it makes sense to use the traditional SE curriculum or the RF approach, depends on the instructor's priorities. The standard-error approach was developed in the context of small $n$ and costly computation. (Sufficient statistics support a computationally light, two-phase approach to inferential calculation.) But it does not generalize to the use of multiple explanatory variables or even to multiple levels of a single categorical explanatory variable. 
 
-The R/F procedure unifies and generalizes well to inferential settings with covariates. R/F imposes a heavier computational load (to calculate model values), although a graphical approach to pedagogy allows approximate results to be constructed with calculations by eye.
+The RF procedure unifies and generalizes well to inferential settings with covariates. RF imposes a somewhat heavier computational load (to calculate model values), although a graphical approach to pedagogy allows closely approximate results to be constructed with calculations by eye.
 
-Both the traditional and the R/F approaches can be streamlined considerably by putting aside situations with small $n$ and the consequent need for tables of critical values. The R/F approach obviates any consideration of dubious aspects of traditional inference such as one-tailed p-values or the spurious precision of the "unequal variance" t-test. R/F, being so closely related to ANOVA, also provides a meaningful basis for introducing the comparison of multiple models, something absent from the traditional approach and it's emphasis on the "single appropriate model" which is, in applications, not so often actually appropriate.
-
-
-
-# FROM BEFORE
-
-The orthodox sequence of inferential topics in a college-level introductory statistics course is familiar to instructors. At the core of the sequence are two descriptive, "one-sample" statistics: the sample mean (for quantitative variables) and the sample proportion (for dicotomous categorical variables). The sampling distributions of these statistics are considered, with the standard errors generally being expressed as formulas, i.e. $s/\sqrt{n}$ and $\sqrt{p (1-p) / n}$. These standard errors are used to construct confidence intervals and to perform hypothesis tests. 
-
-The sequence moves on to "two-sample" statistics which compare the sample means or the sample proportions in two groups. Again, procedures are based on standard errors, which in this context are rather more complicated than in the one-sample settings. Depending on the available time, the sequence may continue on to cover the slope of a simple regression line, the chi-squared test, and sometimes "one-way" ANOVA. 
-
-Among the difficulties faced by students are the complexity of calculating with the formulas (particularly in two-sample inference), the proliferation of similar sounding vocabulary (e.g. standard deviation, standard error, margin of error), confusion about which test to apply when, and students regarding the formulas as arbitrary rather than representing the underlying logical model of sampling. 
-
-These difficulties have been addressed by instructors and textbook authors in several ways. Over the last decade, mainstream textbooks have been introduced that use simulation, resampling, and randomization to make more intuitive the link between sampling variation,  confidence intervals, and hypothesis tests. [Lock, Tintle, Open Intro] Computers can be used to streamline calculations and have a broader benefit of supporting data storage and management, graphical presentation, modeling, and simulation.  Calculators, still widely in use in mathematics classrooms despite having been replaced by computers in all other settings, provide a narrow solution to the finding numerical values of the inference formulas.
-
-Important criticisms of the orthodox inference sequence include it failing to address issues of confounding, covariates, and adjustment; its too-intense focus on statistical "significance" (as opposed to genuine significance in a practical realm); and its lack of connection to contemporary methods of modeling with data. [Cite Horton] 
-
-A longer standing criticism stems from a perceived over-emphasis on theoretical probability rather than data. In the 1960s, John Tukey introduced "data analysis" to refocus statistical thinking on data. [Cite Tukey future of data analysis] Over the decades since, this has evolved into "data science." [Cite 50 years of data science]  The recent push by the American Statistical Association to "move beyond p < 0.05" [Cite recent TAS] and to abandon the use of "significant" in statistical nomenclature poses additional challenges to orthodox inference. 
-
-In this paper, I propose a pedagogical approach to inference that emphasizes the connections between the sample mean, sample proportion, and regression contexts, that provides a smooth path from "two-sample" and simple regression situations to multiple regression, that can be used in a classroom even without computers, and that always leaves the original data in plain view. Section 2 introduces the approach, Section 3 considers limitations and possible objections, and Section 4 discusses some salutary implications for introductory statistics in the emerging world of data science.
-
-
-# Taken out
-
-The graphics described in this section are point plots of data were annotated with models of the response variable as a function of the explanatory variable. When the criterion for fitting a model is least sum of squares, the models are the familiar ones in introductory statistics: means, proportions, and least-square regression lines. 
-
-Of course, the same format of graphic can be made with models constructed using other criteria. Of particular interest pedagogically is the criterion of a student's judgement of what constitutes a pretty good fit. Using this criterion enables trained students to work entirely with a graphical representation of data, without needing explicit computation. Each of the situations (a) through (d) is amenable to approximation by eye of the groupwise means or the straight-line model. Similarly, the standard deviations used in the rug plots can be estimated by eye. 
-
-
-
-ANOVA
-
-MULTIPLE REGRESSION
-
-ROBUST REGRESSION
-
-HAND CALCULATIONS
-
-
-```{r eval = FALSE, echo = FALSE}
-Fframe = list()
-for (n in c(3, 5, 10, 20, 50, 100, 200, 10000)) {
-  Fframe[[n]] <- 
-    data.frame(F = seq(.5, 20, length = 100)) %>%
-    mutate( p = 1 - pf(F,  1, n-1),
-            n = n)
-}
-Fframe <-  dplyr::bind_rows(Fframe) %>%
-  mutate(n = factor(n))
-gf_line(p ~ F, data = Fframe, color  = ~n) +
-  scale_y_log10(breaks = c(0.1, 0.05, .002, 0.01, .005,  0.001),
-                minor_breaks = NULL, limits = c(.0005, .2) ) +
-  scale_x_continuous(breaks  = 1:20)
-```
-
+Both the SE and the RF approaches can be streamlined considerably by putting aside situations with small $n$ and the consequent need for tables of critical values. In addition, the RF approach obviates any consideration of dubious aspects of traditional inference such as one-tailed p-values or the spurious precision of the "unequal variance" t-test. RF, being so closely related to ANOVA, also provides a meaningful basis for introducing the comparison of multiple models, something absent from the traditional approach and it's emphasis on the "single appropriate model" which is, in applications, not so often actually appropriate.
 
 
