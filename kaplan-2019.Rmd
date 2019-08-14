@@ -22,21 +22,41 @@ library(mosaicModel)
 our_theme <- theme_bw()
 ```
 
+## Nick's comments
+
+1. the focus on testing and not confidence intervals is a major issue.  Reconciling your approach with the TAS editorial from the 2019 special issue would be important.
+
+2. defining RF earlier would be helpful
+
+3. you hint at modeling several times but don't follow through.  
+
+4. adding a set of short examples before section 4 would be helpful.  This could include a multivariate example (see point 3)
+
+5. CPS85 is 35 year old data.  It's a little embarassing to use it (it's data from the parents of newly minted stats instructors)
+
+6. dichotomous is misspelled regularly
+
+7. page 6: "F is used" should be "the F distribution is used"
+
+8. Same page: elide "can be determined"
+
+9. page 7: when referring to instructors who teach without computing, add "despite calls to incorporate technology (e.g., revised GAISE College report)
+
+10. "lower-level" perhaps replace by "entry level" or "lower division"?
+
+11. page 11: I got a little lost in point 4.  
+
+12. page 11: "In this context" paragraph might be elaborated upon
+
 ## Abstract {-}
 
 The paper introduces a new approach, called "RF," to teaching inference in college-level introductory statistics. The RF approach can be used to streamline the inference curriculum and unify the various settings distinguished in the traditional curriculum. The RF approach may be especially valuable to instructors who want to include appropriate methods for incorporating covariates into statistical inference. The RF approach is appropriate even for instructors who avoid using computing in their courses, but can also be used by instructors who embrace computing for multiple regression or for a bootstrapping/simulation pedagogy. 
 
 # Introduction
 
-Figure (@first): This is the first element
-
 A familiar and widespread approach to teaching statistical inference in a first university-level course refers to a series of statistics and their standard errors in several specific contexts: the difference between two proportions, the difference between two means, and the slope of a regression line. Prior to engaging these settings, the concept of a standard error is introduced in the context of a single sample proportion or sample mean. 
 
-(@second) This is the second element
-
 I'll refer to the familiar curriculum as the "SE curriculum," as it is so strongly oriented to Standard Errors. This paper presents a new and different perspective on introducing inference that unifies the various settings of the SE curriculum, potentially allowing instructors to streamline their courses and thereby extend the range of topics to include multivariable settings, such as recommended by the 2016 GAISE College report. [Cite: GAISE]
-
-Here, I'm refering to (@second) and to Figure (@first).
 
 The challenges faced by students in the SE curriculum are well known to instructors: the formulas for the standard errors are complicated; the formulas are different for the various settings yet similar enough to be mistaken for one another; the connection of the formulas to the underlying idea of sampling variation is not obvious; the underlying concept of a sampling distribution is nuanced and difficult to assimilate; and cognitive load is imposed by the repeated use of the words sample, standard, error, statistic in the vocabulary, as in the phrases "standard deviation," "standard error," "margin of error," "sample statistic," "sampling variation," and "test statistic."
 
