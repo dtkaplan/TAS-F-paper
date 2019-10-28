@@ -1,18 +1,20 @@
 ---
-title: "A Unified Introduction to Inference"
+title: "Streamlining Introductory Inference"
 author: "Daniel T. Kaplan"
-date: "July 8, 2019"
+date: "Oct 28, 2019"
 output:
+  pdf_document: 
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
   tint::tintHtml:
     fig_caption: yes
     number_sections: yes
   tufte::tufte_handout:
     fig_caption: yes
     number_sections: yes
-  pdf_document: 
-    fig_caption: yes
-    keep_tex: yes
-    number_sections: yes
+header-includes:
+  - \usepackage{setspace}\doublespacing
 ---
 
 ```{r include = FALSE}
@@ -21,6 +23,87 @@ library(tidyverse)
 library(mosaicModel)
 our_theme <- theme_bw()
 ```
+
+
+## Introduction
+
+Instructors of introductory statistics are familiar with a classical approach to statistical inference which works through several canonical settings and statistics: the difference between two proportions, the difference between two means, the slope of a regression line. In each setting, a formula is introduced for the relevant standard error. Once calculated the s.e. is converted to a confidence interval or a p-value by application of appropriate critical values, most often $z^\star$ and $t^\star$. For convenience, I'll call this the "SE curriculum," since the s.e. plays a prominant, although intermediate, role. 
+
+An increasingly accepted alternative pedagogical strategy involves resampling and randomization. Mainstream textbooks -- [@lock5, @tintle, @diez] are market favorites -- move through the same sequence of settings, sometimes adding in inference on other statistics such as the standard deviation, median, etc. I'll call this the "Bootstrap curriculum."
+
+Proponents of the Bootstrap curriculum claim, with good reason [cite bootstrap effectiveness papers?], increased success with students. Skeptics point out that the Bootstrap curriculum requires computing resources that are not always available to to students and that the Bootstrap curriculum cannot address inference with small sample size, say $n \lessapprox 10$. Also expressed is an attitude that the formula-based inference is the precise idealization of inference and that Bootstrap provides only a rough approximation.
+
+In this paper, I introduce an alternative to SE which, like SE, does not require computer implementation and which handles small $n$ in an accepted manner. I call this the RF curriculum, for reasons that will become apparent. I do not offer RF as an alternative to Bootstrap. Bootstrap has pedagogical and other advantages that ought to be used in a modern statistics course. Instead, RF is proposed as a means for instructors who are hesitant to adopt Bootstrap. Section II describes RF and constrasts it with SE. Section III discusses the lost opportunity and substantial costs to student learning imposed by SE, and includes speculation on the cultural reasons why these costs have been accepted for so long even with the ready availability of computing power. Section IV provides a graphical formulation of RF and illustrates how RF and Bootstrap can work hand in hand. 
+
+## SE & RF
+
+For brevity I'll describe just one of the canonical settings used in SE: the difference in two "group proportions." The other settings run very much in parallel.  
+
+As will be familiar to many readers, inference on the difference in two proportions follows a path like this:
+
+- SE start. The inputs provided are the sample proportion and sample size in each of two groups, 1 and 2. These inputs are often denoted as $p_1$, $n_1$, $p_2$, $n_2$. The test statistic, which I'll call $b$, is simply defined: $b = p_1 - p_2$.
+
+- SE step 2. The standard error of the test statistic is provided via a formula (or, potentially, software). In the two-proportion setting the usual formula is:
+$$ s.e. = \sqrt{\frac{p_1 (1 - p_1)}{n_1} + \frac{p_2 (1 - p_2)}{n_2}}$$
+
+- SE step 3. A probability distribution is associated with the setting and an appropriate critical value is noted. In the two-proportion setting, the normal distribution is used, producing a critical value of $z^\star = 1.96$ for a 95% inference level.
+
+- SE result. Convert the values in steps (2) and (3) to either or both of two standard inferential forms: 
+    a. The confidence interval is computed as $b \pm z^\star \mbox{s.e}$.
+    b. The quantity $\frac{b}{\mbox{s.e.}}$ is compared to a critical value, resulting in a conclusion: "reject the null" or "fail to reject the null."
+    
+RF inference starts with a different paradigm, one more in keeping with modern statistical and data science practice. The SE process starts with summary statistics on groups. In RF, there is data and variables: in particular a response variable and one (or more) explanatory variable. The response and explanatory variables can be either numeric or categorical. The summary statistics in SE are replaced in RF with the concept of a "model." For our purpose, the model can be described as a function which takes a value for the explanatory variable as input and produces as output a value in terms of the response variable. Finally, the response variable, if categorical, is transformed to a numeric 0/1 encoding. Thus, all models have a numerical output.
+
+- RF start. A dataset is provided and a response and an explanatory variable are selected according to the interests of the analyst. Categorical variables are recoded as 0/1 and a model is provided that translates any value of the explanatory variable into a value in the form of the response. Note that when the explanatory variable is categorical, the model amounts to the groupwise proportion or groupwise means in the SE terminology.
+
+- RF step 2. Calculate an "effect size" which reports how the response tends to differ between two different values of the explanatory variable. We'll denote this by $b$, as we did for the test statistic in SE.
+
+- RF step 3. Calculate the variance of the response variable. We'll denote this as $v_r$. Similarly, apply the model to each of the values of the explanatory variable to produce a set of "model values." Calculate the variance of this, which we'll denote $v_m$. 
+
+- RF step 4. Combine $v_r$, $v_m$, and the sample size $n$ into a single quantity, denoted F:
+
+$$ \mbox{F} \equiv (n-1) \frac{v_m}{v_r - v_m}$$
+    
+- RF result. The conversion to the two inferential forms is based on the effect size and F.
+    a. The 95% confidence interval is $b (1 \pm \sqrt(F/4))$.
+    b. Reject or fail to reject based on whether F is bigger than 4 or not.
+    
+My claim that RF is streamlined compared to SE is based on these observations.
+
+1. Exactly the same process and formula for F is used for all the elementary inferential settings. SE, by comparison, involves a different custom formula for each of the settings. 
+2. RF, as described, does not involve the selection or evaluation of a probability distribution. Instead, the number 4 is always used. Admittedly, SE could achieve this steamlining by replacing critical values $z_\star$ and $t_\star$ with the number 2.
+3. Starting with RF and progressing to an additional inferential setting, where a categorical explanatory variable has more than two levels, can be done with a trivial modification to the formula for F. For SE, it involves discarding the whole inferential apparatus based on the standard error in favor of unfamiliar formulas involving sums of squares. It additionally requires introducing a new probability distribution: F. 
+4. Still another inferential setting, where the response is categorical and the explanatory variable is quantitative, can be handled by RF with the same formula and interpretation of F. The SE approach ignores this setting, even though it is as important in practice as the others.
+5. Still another inferential setting, where both the response and explanatory variables are categorical, is covered by the same RF procedure. In contrast, the apparatus of SE cannot be used at all, which is why a completely new topic, chi-squared, is added on to introductory statistics. 
+6. Another important inferential setting, where there is more than one explanatory variable, fits into the RF framework with the same modifications as in 3. 
+
+
+
+## Costs of SE and lost opportunities
+
+Confusing terminology.
+
+One-tailed versus two tailed.
+
+All that detail in the critical values. Encourages the wrong belief that there is a hard threshold and any amount under or over it has a qualitative effect on the ability to reject the null hypothesis. 
+
+Mis-interpretaton of p values. So stop with the p and just use F.
+
+Lost opportunity: 
+1. fails to connect with the concept of modeling more generally. 
+2. Use comparison of models rather than hypothesis testing.
+3. cross-validation is an entirely different idea. ???
+
+Why are these costs accepted?
+
+## A graphical presentation of RF
+
+    
+The SE method introduces small variations from one setting to another. For instance, in the two-means setting, the descriptive statistics are the groupwise means, standard deviations, and group sizes $n_1$ and $n_2$. The formula for the standard error in step (2) looks substantially different, and
+
+AT THIS POINT IT'S Worth pointing out some distinctive feature of the SE path. First, no "raw" data is required. The method requires only summary statistics. Second: groups and proportions. Third: typically considerable time is spent on the difference between probability distributions appropriate for finding critical values. Fourth, the test statistic is not necessarily the most appropriate for real-world problems involving the comparison of two proportions: The risk ratio and odds ratio are ignored. Fifth: doesn't use explanatory/response formulation and there is no notation to indicate which is the response and which is the explanatory variable. We're not actually interested in the standard error: it's the margin of error that's important for a CI and the p-value for a hypothesis test.
+    
+    
 
 ## Nick's comments
 
@@ -47,6 +130,8 @@ our_theme <- theme_bw()
 11. page 11: I got a little lost in point 4.  
 
 12. page 11: "In this context" paragraph might be elaborated upon
+
+\LARGE
 
 ## Abstract {-}
 
@@ -278,15 +363,19 @@ Pboth <-
   gf_theme(our_theme) %>%
   gf_theme(axis.text.x = element_text(angle = 45, hjust = 1)) %>%
   gf_refine(scale_colour_manual(values=c("orange", "green"))) %>%
-  gf_segment(wage + wage ~ 9.5 + 9.7, shape = "-", alpha = 0.5, width = 2) %>%
+  gf_segment(wage + wage ~ 9.5 + 9.7, shape = "-", 
+             alpha = 0.5, width = 2) %>%
   gf_pointrange(mean + lower + upper ~ 9.4, 
-                data = Raw_stats_sector,  color = "pink", size = 1.5, alpha = 0.5) %>%
-  gf_errorbar(mean + mean ~ sector, color = ~ sex, data = Stats_sector, position = position_dodge(), size = 2) %>%
+                data = Raw_stats_sector,  color = "pink", 
+                size = 1.5, alpha = 0.5, , inherit = FALSE) %>%
+  gf_errorbar(mean + mean ~ sector, color = ~ sex, data = Stats_sector,
+              position = position_dodge(), size = 2, inherit=FALSE) %>%
 gf_segment(mean + mean ~ 8.8 + 9.0, shape = "-", color = ~ sex,
            data = Stats_sector, size = 1.5,
            alpha = 0.5, width = 2) %>%
   gf_pointrange(middle + lower + upper ~ 9.1, 
-                data = Mod_stats,  color = "blue", size = 1.5, alpha = 0.5)
+                data = Mod_stats,  color = "blue", 
+                size = 1.5, alpha = 0.5, inherit=FALSE)
 Pboth
 ```
 
